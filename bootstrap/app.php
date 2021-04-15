@@ -98,6 +98,13 @@ $app->configure('app');
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
 
+if ($app->environment() !== 'production') {
+    // https://github.com/barryvdh/laravel-ide-helper/pull/438#issuecomment-656593044
+    class_alias(Illuminate\Database\Eloquent\Model::class, 'Eloquent');
+    $app->config->set('app.aliases', ['Eloquent' => Illuminate\Database\Eloquent\Model::class]);
+    $app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
