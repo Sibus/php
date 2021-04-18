@@ -18,6 +18,8 @@ use Illuminate\Support\Carbon;
  * @property int $type Тип транзакции
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Refund|null $refund
+ * @property-read User $user
  * @method static TransactionFactory factory(...$parameters)
  * @method static Builder|Transaction newModelQuery()
  * @method static Builder|Transaction newQuery()
@@ -37,8 +39,6 @@ class Transaction extends Model
     const TYPE_REFILL = 1;
     /** @const списание со счета */
     const TYPE_DEBIT = 2;
-    /** @const Возвращаемая транзакция */
-    const TYPE_REFUND = 3;
 
     use HasFactory;
 
@@ -48,6 +48,31 @@ class Transaction extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'value', 'description', 'type', 'created_at',
+        'value', 'description',
     ];
+
+    public function isRefill(): bool
+    {
+        return $this->type === static::TYPE_REFILL;
+    }
+
+    public function isDebit(): bool
+    {
+        return $this->type === static::TYPE_DEBIT;
+    }
+
+    public function isRefunded(): bool
+    {
+        return $this->refund !== null;
+    }
+
+    public function refund()
+    {
+        return $this->hasOne(Refund::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

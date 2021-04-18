@@ -15,3 +15,5 @@
 
 $router->get('/', 'HomeController@info');
 $router->get('users/{userId}/balance', 'UserController@balance');
+$router->post('users/{userId}/transactions', 'TransactionController@store');
+$router->post('transactions/{transactionId}/refund', 'TransactionController@refund');

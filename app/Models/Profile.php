@@ -39,4 +39,19 @@ class Profile extends Model
     protected $fillable = [
         'user_id', 'balance',
     ];
+
+    public function canAfford($value): bool
+    {
+        return bccomp(bcadd($this->balance, $value), 0) >= 0;
+    }
+
+    public function cannotAfford($value): bool
+    {
+        return !$this->canAfford($value);
+    }
+
+    public function addBalance($value): void
+    {
+        $this->balance = bcadd($this->balance, $value);
+    }
 }

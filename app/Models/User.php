@@ -7,6 +7,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -21,6 +22,8 @@ use Laravel\Lumen\Auth\Authorizable;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Profile|null $profile
+ * @property-read Collection|Transaction[] $transactions
+ * @property-read int|null $transactions_count
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -54,11 +57,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
-    /**
-     * @return Profile
-     */
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }
