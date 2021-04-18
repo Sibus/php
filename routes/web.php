@@ -14,3 +14,4 @@
 */
 
 $router->get('/', 'HomeController@info');
+$router->get('users/{userId}/balance', 'UserController@balance');
